@@ -1,0 +1,94 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("POSTGRES_PRISMA_URL")
+}
+
+enum Difficulty {
+    EASY
+    MEDIUM
+    HARD
+}
+
+model Profile {
+    id        String    @id @default(uuid())
+    email     String    @unique
+    name      String
+    password  String
+    recipes   Recipe[]
+    comments  Comment[]
+    ratings   Rating[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
+
+model Recipe {
+    id          String       @id @default(uuid())
+    title       String
+    description String?
+    imageUrl    String
+    prepTime    Int?
+    cookTime    Int?
+    servings    Int?
+    difficulty  Difficulty
+    author      Profile      @relation(fields: [authorId], references: [id])
+    authorId    String
+    ingredients Ingredient[]
+    steps       Step[]
+    categories  Category[]
+    comments    Comment[]
+    ratings     Rating[]
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+
+    @@map("recipes")
+}
+
+model Ingredient {
+    id       String  @id @default(uuid())
+    name     String
+    quantity String?
+    recipe   Recipe  @relation(fields: [recipeId], references: [id])
+    recipeId String
+}
+
+model Step {
+    id       String @id @default(uuid())
+    order    Int
+    content  String
+    recipe   Recipe @relation(fields: [recipeId], references: [id])
+    recipeId String
+}
+
+model Category {
+    id      String   @id @default(uuid())
+    name    String   @unique
+    recipes Recipe[]
+}
+
+model Comment {
+    id        String   @id @default(uuid())
+    text      String
+    author    Profile  @relation(fields: [authorId], references: [id])
+    authorId  String
+    recipe    Recipe   @relation(fields: [recipeId], references: [id])
+    recipeId  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Rating {
+    id        String   @id @default(uuid())
+    value     Int
+    author    Profile  @relation(fields: [authorId], references: [id])
+    authorId  String
+    recipe    Recipe   @relation(fields: [recipeId], references: [id])
+    recipeId  String
+    createdAt DateTime @default(now())
+
+    // Garante que cada usuário avalie uma receita apenas uma vez
+    @@unique([authorId, recipeId])
+}
