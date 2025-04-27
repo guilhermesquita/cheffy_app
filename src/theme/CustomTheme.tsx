@@ -21,6 +21,7 @@ export function CustomTheme({ children, ...props }: CustomThemeProps) {
         '--green-10': '#7aa055',
         '--orange-9': '#F4B393',
         '--orange-10': '#e5977d',
+        backgroundColor: '#f0eeee'
       } as React.CSSProperties}
     >
       {children}

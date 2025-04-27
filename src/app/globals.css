@@ -1,21 +1,13 @@
-/* styles/globals.css */
-:root {
-  /* Cores principais */
-  --plum-9: #6C4AB6;    /* Ameixa */
-  --green-9: #8CB369;   /* Verde */
-  --orange-9: #F4B393;  /* Rosa */
-  
-  /* Tons mais claros/escuros (você pode ajustar conforme necessidade) */
-  --plum-1: #f5f0ff;
-  --plum-12: #3a2673;
-  --green-1: #f0f7e9;
-  --green-12: #3a5a2a;
-  --orange-1: #fff0eb;
-  --orange-12: #c45e2a;
+@import "tailwindcss";
+
+@theme {
+  --text-caption: 10px;
+  --text-captionMedium: 12px;
+  --text-captionLarge: 15px;
+  --color-error: #eb152e;
+  --color-main-plum-9: #6C4AB6
 }
 
-.dark {
-  --plum-9: #7d5bc0;
-  --green-9: #9bc97d;
-  --orange-9: #f6c2a8;
+[data-radix-ui-button] {
+  cursor: pointer;
 }

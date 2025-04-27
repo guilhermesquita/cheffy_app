@@ -1,10 +1,10 @@
 "use client";
+import CfButton from "@/components/ui/cfButton";
 import "@radix-ui/themes/styles.css";
-import CfButton from "@/components/cfButton";
 
 export default function Home() {
   return (
-    <div >
+    <div>
       CHEEFY
       <CfButton title="INICIO" onClick={() => alert('asdsa')}/>
     </div>
