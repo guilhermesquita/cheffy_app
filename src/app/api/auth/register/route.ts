@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { registerSchema } from '../[validators]/registerSchema';
 import { registerFactory } from '@/features/auth/main/factory/registerFactory';
+import { CheffyAppError } from '@/features/error/CheffyAppError';
 
 export async function POST(request: Request) {
   try {
@@ -21,9 +22,16 @@ export async function POST(request: Request) {
     return NextResponse.json(result, { status: 201 });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    if(error instanceof CheffyAppError){
+      return NextResponse.json(
+        { error: error.response },
+        { status: error.response.code } 
+      );
+    }
+    
     return NextResponse.json(
       { error: error.message || 'Erro interno do servidor' },
-      { status: 400 } 
+      { status: 500 } 
     );
   }
 }
