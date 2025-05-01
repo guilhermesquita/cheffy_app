@@ -7,4 +7,9 @@ export class PasswordHasher {
         const hashedPassword = await bcrypt.hash(param.password, SALT_ROUNDS);
         return hashedPassword
     }
+
+    public async validatePassword(param: {password: string, passwordHashed: string}){
+        const password = await bcrypt.compare(param.password, param.passwordHashed)
+        return password
+    }
 }
