@@ -7,6 +7,7 @@ import {
 } from "../adapter/errors/endpointError";
 import { AuthError } from "./errors/AuthError";
 import { AuthErrorUnauthorized } from "./errors/AuthErrorUnauthorized";
+import { responseType } from "./responseType";
 
 export const authRepository = {
   register(params: registerInputDTO) {
@@ -28,14 +29,14 @@ export const authRepository = {
     return request;
   },
   async login({ password, email }: loginInputDTO) {
-    const request = await endpointAdapter.post({
+    const request = await endpointAdapter.post<responseType>({
       path: "api/auth/",
       body: {
         password,
         email,
       },
     });
-
+    
     if (request instanceof EndpointUnauthorizedError) {
       throw new AuthErrorUnauthorized();
     }

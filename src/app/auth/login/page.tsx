@@ -7,10 +7,9 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { loginFormData } from "../[validators]/loginSchemaUI";
 import { useAuth } from "./hooks/useAuth";
-import { signIn } from "next-auth/react";
 
 const LoginPage = () => {
-  const { taskMutationRemove, errorCredential, setErrorCredentials } =
+  const { loginMutation, errorCredential, setErrorCredentials, loginOnAuthMutation } =
     useAuth();
 
   const router = useRouter();
@@ -22,7 +21,7 @@ const LoginPage = () => {
   } = useForm<loginFormData>();
 
   const onSubmit: SubmitHandler<loginFormData> = async (data) => {
-    await taskMutationRemove.mutateAsync(data);
+    await loginMutation.mutateAsync(data);
   };
 
   return (
@@ -65,12 +64,12 @@ const LoginPage = () => {
 
         <div className="space-y-1">
           <CfButton
-            title={taskMutationRemove.isPending ? "carregando..." : "Login"}
+            title={loginMutation.isPending ? "carregando..." : "Login"}
             fullButton={true}
             type="submit"
           />
           <CfButtonOutline
-            onClick={() => signIn("google", { callbackUrl: "/" })}
+            onClick={() => loginOnAuthMutation.mutate()}
             title={"Entre com o google"}
             fullButton={true}
             iconRight={<IconGoogle />}

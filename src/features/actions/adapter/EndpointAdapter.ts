@@ -136,7 +136,7 @@ export class EndpointAdapter implements methods {
       //     defaultHeaders["x-organization-id"] = currentOrgId.orgId;
       //   }
 
-      const axiosReponse = await this.instance.request<EndpointResponse<T>>({
+      const axiosReponse = await this.instance.request<T>({
         baseURL: baseUrl,
         url: path,
         method,
@@ -149,7 +149,7 @@ export class EndpointAdapter implements methods {
       });
       return {
         status: axiosReponse.status,
-        data: axiosReponse.data.data,
+        data: axiosReponse.data,
       };
     } catch (error) {
       if (error instanceof AxiosError) {
