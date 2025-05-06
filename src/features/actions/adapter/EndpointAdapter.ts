@@ -12,6 +12,7 @@ import {
 import axios, { AxiosError, AxiosInstance } from "axios";
 import {
   EndpointBadRequestError,
+  EndpointConflictError,
   EndpointError,
   EndpointForbiddenError,
   EndpointInternalServerError,
@@ -157,6 +158,7 @@ export class EndpointAdapter implements methods {
         if (status === 500) return new EndpointInternalServerError();
         if (status === 400) return new EndpointBadRequestError();
         if (status === 403) return new EndpointForbiddenError();
+        if (status === 409) return new EndpointConflictError();
         if (status === 401 && !checkCredential) {
           if (retryRefreshToken) {
             try {

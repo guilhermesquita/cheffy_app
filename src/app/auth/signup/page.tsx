@@ -6,15 +6,30 @@ import { TextField } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { Form } from "radix-ui";
 import { useState } from "react";
+import { useAuth } from "../login/hooks/useAuth";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { registerFormData } from "../[validators]/registerSchemaUI";
 
 const SignupPage = () => {
   const router = useRouter();
 
+  const {
+    register,
+    handleSubmit,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    formState: { errors },
+  } = useForm<registerFormData>();
+
   const [seePassword, setSeePassword] = useState(false);
+  const { registerMutation, errorCredential } = useAuth();
+
+  const onSubmit: SubmitHandler<registerFormData> = async (data) => {
+    await registerMutation.mutateAsync(data);
+  };
 
   return (
     <div>
-      <Form.Root className="space-y-3">
+      <Form.Root className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
         <Form.Field className="FormField" name="email">
           <div
             style={{
@@ -29,6 +44,11 @@ const SignupPage = () => {
             <Form.Message className="FormMessage" match="valueMissing">
               <p className={`text-caption text-error`}>Adicione seu email</p>
             </Form.Message>
+            {errorCredential && (
+              <Form.Message className="FormMessage">
+                <p className={`text-caption text-error`}>Email já cadastrado!</p>
+              </Form.Message>
+            )}
             <Form.Message className="FormMessage" match="typeMismatch">
               <p className={`text-caption text-error`}>
                 Adicione um email válido
@@ -38,9 +58,10 @@ const SignupPage = () => {
           <Form.Control asChild>
             <TextField.Root
               variant="soft"
-              color={"purple"}
+              color={errorCredential ? "red" : "purple"}
               required
               type="email"
+              {...register("email")}
             />
           </Form.Control>
         </Form.Field>
@@ -68,6 +89,7 @@ const SignupPage = () => {
               color={"purple"}
               type="text"
               required
+              {...register("name")}
             />
           </Form.Control>
         </Form.Field>
@@ -91,6 +113,7 @@ const SignupPage = () => {
             variant="soft"
             color="purple"
             type={seePassword ? "text" : "password"}
+            {...register("password")}
             required
           >
             <button
@@ -105,11 +128,7 @@ const SignupPage = () => {
         </Form.Field>
 
         <Form.Submit asChild>
-          <CfButton
-            onClick={() => router.push("/")}
-            title="Criar conta"
-            fullButton
-          />
+          <CfButton type="submit" title="Criar conta" fullButton />
         </Form.Submit>
       </Form.Root>
 
